@@ -1,0 +1,26 @@
+Each script is purposefully built self-contained.
+All python scipts must be invoked from the prepared virtualenv from requirements file  
+
+All contents of this repo is made to make zabbix administration easier. Tasks such as database backup, partitioning mysql 
+is scripted out and run from cron only. The little intelligence built into the scripts are made to withstand bugs, if not all.
+The scripts are run in my production environment, where:
+Total DB size: ~800GB with 3 month retention
+Total applications integrated: 12
+Total Linux/UNIX hosts: 250+
+And many custom items.
+
+partition_mgt.py
+This script is meant to partition the mysql database for zabbix into user's own choice of number of partitions on a future month.
+The partitioning scheme is range only and no subpartition is used. There's explicit use to data directory in partition, because to
+split out the IO across the LV. My production is meant to have pv-vg-lv as one to one relation, to distribute IO to maximum level from OS.
+However, there are more tunings done on mysql size which is in my.cnf
+
+
+mysql-backup.sh
+This script actually dumps tables in two stages.
+1. without data for all tables 
+2. with data for specific tables which are less than 1200MB in size. 
+
+Both stages dump in two different files. One skeletal with table definition, another with data (usually this one is configs)
+An rsync is run to sync all physical data files. This is the 3rd measure to dump entire DB. This is error prone and requires longer time
+to recover database. 
