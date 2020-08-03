@@ -5,7 +5,7 @@ import math
 import time
 import calendar
 
-def getPartNameDates(months_ahead_from_now=1,partitions_per_month=10):
+def getPossiblePartitions(months_ahead_from_now=1,partitions_per_month=10):
     ret = dict()
     dates = list()
     year = datetime.datetime.today().year
@@ -26,4 +26,4 @@ def getPartNameDates(months_ahead_from_now=1,partitions_per_month=10):
         ret[(time.strftime("%b%d%Y",time.gmtime(unixtime))).lower()] = unixtime
     return ret
 
-print(getPartNameDates(4,15))
+print(getPossiblePartitions(1,10))
